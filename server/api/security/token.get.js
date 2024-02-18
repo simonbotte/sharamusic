@@ -1,4 +1,3 @@
-import fs from "fs";
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (event) => {
@@ -16,6 +15,5 @@ export default defineEventHandler(async (event) => {
             kid: keyId,
         },
     });
-    console.log(token);
     return { token };
 });
