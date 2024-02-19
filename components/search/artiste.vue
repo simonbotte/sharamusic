@@ -7,13 +7,13 @@ const hasArtwork = ref(true);
 if (props?.artist?.attributes?.artwork?.url == undefined) {
     hasArtwork.value = false;
 }
-const artistInitials = computed(() => {
+const contentInitials = computed(() => {
     return props.artist.attributes.name
         .split(" ")
-        .map((word) => word[0])
-        .join("");
+        .map((word) => word[0].toUpperCase())
+        .join("")
+        .substring(0, 2);
 });
-
 </script>
 
 <template>
@@ -22,16 +22,18 @@ const artistInitials = computed(() => {
         :to="`/artists/${artist.id}`"
         class="artist flex items-center border-b border-b-zinc-400 gap-2 py-2"
     >
-        <div class="artist__artwork shrink-0">
+        <div class="w-24 h-24 relative shrink-0">
             <img
-                v-if="hasArtwork"
-                class="rounded-md border border-zinc-400"
-                :width="112"
-                :src="$getArtwork(artist?.attributes?.artwork?.url, 300, 300)"
+                class="absolute z-10 rounded-md border border-zinc-400"
+                :width="96"
+                :src="$getArtwork(artist?.attributes?.artwork?.url, 336, 336)"
             />
-            <div class="rounded-md border bg-zinc-200 text-zinc-700 border-zinc-400 w-28 h-28 flex content-center justify-center" v-else>
-                <p class="text-5xl inline">{{artistInitials}}</p>
-            </div>
+            <p
+                class="absolute z-0 rounded-md border border-zinc-400 w-24 h-24 flex items-center justify-center text-5xl"
+                :style="`background-color: #${artist.attributes.artwork.bgColor}; color: #${artist.attributes.artwork.textColor2};`"
+            >
+                {{ contentInitials }}
+            </p>
         </div>
         <div class="artist__info max-w-full overflow-hidden">
             <p
@@ -42,28 +44,6 @@ const artistInitials = computed(() => {
             <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                 Artiste
             </p>
-            <div v-if="hasArtwork" class="flex gap-2">
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${artist.attributes.artwork.textColor1}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${artist.attributes.artwork.textColor2}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${artist.attributes.artwork.textColor3}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${artist.attributes.artwork.textColor4}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${artist.attributes.artwork.bgColor}`"
-                ></div>
-            </div>
         </div>
     </NuxtLink>
 </template>

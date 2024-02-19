@@ -61,8 +61,8 @@ const buildCanvas = async () => {
     //create the card
     const cardProps = {
         width: 604,
-        height: 716,
-        borderRadius: 48,
+        height: 732,
+        borderRadius: 40,
         backgroundColor: `#${content.value.attributes.artwork.bgColor}`,
     };
 
@@ -72,7 +72,7 @@ const buildCanvas = async () => {
         canvasProps.height / 2 - cardProps.height / 2,
         cardProps.width,
         cardProps.height,
-        50,
+        cardProps.borderRadius,
         `#${content.value.attributes.artwork.bgColor}`
     );
 
@@ -97,8 +97,11 @@ const buildCanvas = async () => {
             canvasProps.height / 2 - cardProps.height / 2 + 32,
             imageProps.width,
             imageProps.height,
-            16
+            8
         );
+        setTimeout(() => {
+            ctx.drawImage(calc2, 0, 0);
+        }, 80);
     };
 
     //add textes
@@ -126,6 +129,21 @@ const buildCanvas = async () => {
                 44,
             opacity: 0.8,
         },
+        brand: {
+            text: "Apple Music",
+            font: "20px helvetica",
+            color: `#${content.value.attributes.artwork.textColor1}`,
+            x: canvasProps.width / 2 - 540 / 2,
+            y:
+                canvasProps.height / 2 -
+                cardProps.height / 2 +
+                32 +
+                540 +
+                44 +
+                44 +
+                36,
+            opacity: 0.6,
+        },
     };
     setTimeout(() => {
         drawText(
@@ -150,15 +168,21 @@ const buildCanvas = async () => {
             540,
             28
         );
+        drawText(
+            ctx,
+            textProps.brand.text,
+            textProps.brand.x,
+            textProps.brand.y,
+            textProps.brand.font,
+            textProps.brand.color,
+            textProps.brand.opacity,
+            540,
+            28
+        );
     }, 100);
-
-    //merge calc1 to canvas
     setTimeout(() => {
         ctx.drawImage(calc1, 0, 0);
     }, 20);
-    setTimeout(() => {
-        ctx.drawImage(calc2, 0, 0);
-    }, 80);
 };
 
 const saveAsImage = () => {
@@ -174,24 +198,15 @@ onMounted(() => {
 </script>
 
 <template>
-    <!-- <div class="card grid relative">
-        <h1 class="fixed">{{ type }} - {{ id }}</h1>
-        <div class="background">
-            <ResultContent :content="content" class="max-w-full" />
+    <div class="result flex flex-col relative w-full items-center justify-center">
+        <canvas ref="canvas" class="sharable w-full max-w-96" />
+        <div class="save fixed bottom-4">
+            <button
+                v-on:click="saveAsImage"
+                class="bg-zinc-600 text-white rounded-md px-4 py-2"
+            >
+                Enregistrer
+            </button>
         </div>
-        <div
-            class="content absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 w-full flex justify-center"
-        >
-            <CardContent :content="content" />
-        </div>
-    </div> -->
-    <canvas ref="canvas" class="sharable w-96" />
-    <div class="save">
-        <button
-            v-on:click="saveAsImage"
-            class="bg-slate-600 text-white rounded-md p-2"
-        >
-            Save
-        </button>
     </div>
 </template>

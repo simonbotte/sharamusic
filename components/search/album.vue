@@ -7,6 +7,14 @@ const hasArtwork = ref(true);
 if (props?.album?.attributes?.artwork?.url == undefined) {
     hasArtwork.value = false;
 }
+
+const contentInitials = computed(() => {
+    return props.album.attributes.name
+        .split(" ")
+        .map((word) => word[0].toUpperCase())
+        .join("")
+        .substring(0, 2);
+});
 </script>
 
 <template>
@@ -15,12 +23,18 @@ if (props?.album?.attributes?.artwork?.url == undefined) {
         :to="`/albums/${album.id}`"
         class="album flex items-center border-b border-b-zinc-400 gap-2 py-2"
     >
-        <div class="album__artwork shrink-0">
+        <div class="w-24 h-24 relative shrink-0">
             <img
-                class="rounded-md border border-zinc-400"
-                :width="100"
-                :src="$getArtwork(album.attributes.artwork.url, 300, 300)"
+                class="absolute z-10 rounded-md border border-zinc-400"
+                :width="96"
+                :src="$getArtwork(album?.attributes?.artwork?.url, 336, 336)"
             />
+            <p
+                class="absolute z-0 rounded-md border border-zinc-400 w-24 h-24 flex items-center justify-center text-5xl"
+                :style="`background-color: #${album.attributes.artwork.bgColor}; color: #${album.attributes.artwork.textColor2};`"
+            >
+                {{ contentInitials }}
+            </p>
         </div>
         <div class="album__info max-w-full overflow-hidden">
             <p
@@ -31,28 +45,7 @@ if (props?.album?.attributes?.artwork?.url == undefined) {
             <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                 Album · {{ album.attributes.artistName }}
             </p>
-            <div class="flex gap-2">
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${album.attributes.artwork.textColor1}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${album.attributes.artwork.textColor2}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${album.attributes.artwork.textColor3}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${album.attributes.artwork.textColor4}`"
-                ></div>
-                <div
-                    class="w-3 h-3"
-                    :style="`background-color:#${album.attributes.artwork.bgColor}`"
-                ></div>
-            </div>
+            
         </div>
     </NuxtLink>
 </template>
