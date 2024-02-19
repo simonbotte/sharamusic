@@ -33,7 +33,7 @@ const search = async () => {
 </script>
 
 <template>
-    <section class="home px-4 pt-2 w-full max-w-5xl mx-auto">
+    <section class="home px-4 pt-2 w-full mx-auto">
         <div class="sticky top-0 py-4 bg-white z-20">
             <input
                 class="border-slate-600 border rounded-md px-2 py-1 w-full focus:outline-zinc-600"

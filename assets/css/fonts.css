@@ -1,0 +1,93 @@
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100;
+    src: url("./../fonts/SF-Pro-Text-Ultralight.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Ultralight.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200;
+    src: url("./../fonts/SF-Pro-Text-Thin.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Thin.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url("./../fonts/SF-Pro-Text-Light.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Light.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url("./../fonts/SF-Pro-Text-Regular.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Regular.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url("./../fonts/SF-Pro-Text-Medium.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Medium.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 600;
+    src: url("./../fonts/SF-Pro-Text-Semibold.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Semibold.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src: url("./../fonts/SF-Pro-Text-Bold.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Bold.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 800;
+    src: url("./../fonts/SF-Pro-Text-Heavy.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Heavy.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+@font-face {
+    font-family: "SF-PRO-TEXT";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 900;
+    src: url("./../fonts/SF-Pro-Text-Black.woff2") format("woff2");
+    src: url("./../fonts/SF-Pro-Text-Black.woff") format("woff");
+    unicode-range: U+000-5FF;
+}
+
+*{
+    font-family: "SF-PRO-TEXT", sans-serif;
+}

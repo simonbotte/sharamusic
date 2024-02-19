@@ -24,10 +24,22 @@ const gradiantProps = {
     backgroundColor: `#${content.value.attributes.artwork.bgColor}`,
     content: content.value,
 };
-console.log(content.value);
+
 const { getGradientImageUrl } = useGrainGradient(gradiantProps);
 const { getContentInfo } = useContentInfo(content.value);
 const { drawRoundRect, drawImageWithBorderRadius, drawText } = useCanvasUtils();
+const contentInfo = getContentInfo();
+
+useHead({
+    title: `${contentInfo.title} | SharaMusic`,
+    meta: [
+        {
+            name: "description",
+            content:
+            `${contentInfo.title} · ${contentInfo.description}`,
+        },
+    ],
+});
 
 const buildCanvas = async () => {
     const canvasProps = {
@@ -110,14 +122,14 @@ const buildCanvas = async () => {
     const textProps = {
         title: {
             text: contentInfo.title,
-            font: "bold 28px helvetica",
+            font: "bold 28px SF-PRO-TEXT",
             color: `#${content.value.attributes.artwork.textColor1}`,
             x: canvasProps.width / 2 - 540 / 2,
             y: canvasProps.height / 2 - cardProps.height / 2 + 32 + 540 + 44,
         },
         description: {
             text: contentInfo.description,
-            font: "28px helvetica",
+            font: "28px SF-PRO-TEXT",
             color: `#${content.value.attributes.artwork.textColor1}`,
             x: canvasProps.width / 2 - 540 / 2,
             y:
@@ -126,12 +138,12 @@ const buildCanvas = async () => {
                 32 +
                 540 +
                 44 +
-                44,
+                40,
             opacity: 0.8,
         },
         brand: {
             text: "Apple Music",
-            font: "20px helvetica",
+            font: "20px SF-PRO-TEXT",
             color: `#${content.value.attributes.artwork.textColor1}`,
             x: canvasProps.width / 2 - 540 / 2,
             y:
@@ -141,7 +153,7 @@ const buildCanvas = async () => {
                 540 +
                 44 +
                 44 +
-                36,
+                40,
             opacity: 0.6,
         },
     };
@@ -198,7 +210,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="result flex flex-col relative w-full items-center justify-center">
+    <div
+        class="result flex flex-col relative w-full items-center justify-center"
+    >
         <canvas ref="canvas" class="sharable w-full max-w-96" />
         <div class="save fixed bottom-4">
             <button
