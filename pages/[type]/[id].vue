@@ -6,7 +6,9 @@ let { data: token } = await useFetch("/api/security/token");
 token = ref(token.value.token);
 
 const content = ref({});
+const generatedImage = ref(null);
 const canvas = ref(null);
+const canShare = ref(false);
 
 const url = `https://api.music.apple.com/v1/catalog/fr/${type}/${id}`;
 const { data, error } = await useFetch(url, {
@@ -35,8 +37,7 @@ useHead({
     meta: [
         {
             name: "description",
-            content:
-            `${contentInfo.title} · ${contentInfo.description}`,
+            content: `${contentInfo.title} · ${contentInfo.description}`,
         },
     ],
 });
@@ -191,21 +192,33 @@ const buildCanvas = async () => {
             540,
             28
         );
-    }, 100);
+    }, 200);
     setTimeout(() => {
         ctx.drawImage(calc1, 0, 0);
     }, 20);
+    setTimeout(() => {
+        generatedImage.value.src = canvas.value.toDataURL("image/png");
+    }, 200);
 };
 
-const saveAsImage = () => {
-    const link = document.createElement("a");
-    link.download = "content-card.png";
-    link.href = canvas.value.toDataURL("image/png");
-    link.click();
+const share = () => {
+    if (navigator.share) {
+        navigator
+            .share({
+                title: contentInfo.title,
+                text: contentInfo.description,
+                url: window.location.href,
+            })
+            .then(() => console.log("Successful share"))
+            .catch((error) => console.log("Error sharing", error));
+    }
 };
 
 onMounted(() => {
     buildCanvas();
+    if (navigator.share) {
+        canShare.value = true;
+    }
 });
 </script>
 
@@ -213,13 +226,15 @@ onMounted(() => {
     <div
         class="result flex flex-col relative w-full items-center justify-center pt-4"
     >
-        <canvas ref="canvas" class="sharable w-full max-w-96" />
+        <canvas ref="canvas" class="hidden" />
+        <img class="sharable w-full max-w-96" ref="generatedImage" />
         <div class="save fixed bottom-10">
             <button
-                v-on:click="saveAsImage"
+                v-show="canShare"
+                v-on:click="share"
                 class="bg-zinc-700/30 text-white rounded-md px-4 py-2"
             >
-                Enregistrer
+                Partager
             </button>
         </div>
     </div>
