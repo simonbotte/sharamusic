@@ -21,22 +21,22 @@ const contentInitials = computed(() => {
     <NuxtLink
         v-if="hasArtwork"
         :to="`/songs/${song.id}`"
-        class="song flex items-center border-b border-b-zinc-400 gap-2 py-2"
+        class="song flex items-center border-b border-b-zinc-700 gap-2 py-2 text-zinc-50"
     >
-        <div class="w-24 h-24 relative shrink-0">
+        <div class="w-16 h-16 relative shrink-0">
             <img
-                class="absolute z-10 rounded-md border border-zinc-400"
-                :width="96"
-                :src="$getArtwork(song?.attributes?.artwork?.url, 336, 336)"
+                class="absolute z-10 rounded-md border border-zinc-700"
+                :width="64"
+                :src="$getArtwork(song?.attributes?.artwork?.url, 128, 128)"
             />
             <p
-                class="absolute z-0 rounded-md border border-zinc-400 w-24 h-24 flex items-center justify-center text-5xl"
+                class="absolute z-0 rounded-md border border-zinc-700 w-16 h-16 flex items-center justify-center text-3xl"
                 :style="`background-color: #${song.attributes.artwork.bgColor}; color: #${song.attributes.artwork.textColor2};`"
             >
                 {{ contentInitials }}
             </p>
         </div>
-        <div class="song__info max-w-full overflow-hidden">
+        <div class="song__info max-w-full overflow-hidden text-sm">
             <p
                 class="font-bold whitespace-nowrap overflow-hidden text-ellipsis"
             >

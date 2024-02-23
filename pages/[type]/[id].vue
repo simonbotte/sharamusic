@@ -211,13 +211,13 @@ onMounted(() => {
 
 <template>
     <div
-        class="result flex flex-col relative w-full items-center justify-center"
+        class="result flex flex-col relative w-full items-center justify-center pt-4"
     >
         <canvas ref="canvas" class="sharable w-full max-w-96" />
-        <div class="save fixed bottom-4">
+        <div class="save fixed bottom-10">
             <button
                 v-on:click="saveAsImage"
-                class="bg-zinc-600 text-white rounded-md px-4 py-2"
+                class="bg-zinc-700/30 text-white rounded-md px-4 py-2"
             >
                 Enregistrer
             </button>

@@ -11,7 +11,7 @@ const search = async () => {
         clearTimeout(temporizer.value);
     }
     temporizer.value = setTimeout(async () => {
-        if(query.value.length < 2) {
+        if (query.value.length < 2) {
             albums.value = [];
             songs.value = [];
             artists.value = [];
@@ -28,23 +28,32 @@ const search = async () => {
         albums.value = data.value.results.albums.data;
         songs.value = data.value.results.songs.data;
         artists.value = data.value.results.artists.data;
+        
+        artists.value = artists.value.slice(0, 3);
+        albums.value = albums.value.slice(0, 5);
+        
     }, 200);
 };
 </script>
 
 <template>
-    <section class="home px-4 pt-2 w-full mx-auto">
-        <div class="sticky top-0 py-4 bg-white z-20">
-            <input
-                class="border-slate-600 border rounded-md px-2 py-1 w-full focus:outline-zinc-600"
-                placeholder="Rechercher"
-                type="text"
-                v-model="query"
-                v-on:input="search"
-            />
+    <section class="home pt-0 w-full mx-auto">
+        <div class="sticky container mx-auto px-4 top-0 py-4 bg-zinc-900/40 z-20 backdrop-blur-sm">
+            <div class="relative">
+                <input
+                    class="border-zinc-700 border rounded-md pl-8 py-1 pr-4 w-full bg-zinc-900 focus:outline-zinc-600 text-zinc-50 placeholder:text-zinc-400"
+                    placeholder="Rechercher"
+                    type="text"
+                    v-model="query"
+                    v-on:input="search"
+                />
+                <SymboleMagnifyingGlass
+                    class="absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 text-zinc-400"
+                />
+            </div>
         </div>
 
-        <div class="albums flex flex-col">
+        <div class="flex flex-col pt-0 container px-4 mx-auto">
             <SearchArtiste
                 v-for="artist in artists"
                 :key="artist.id"
