@@ -208,12 +208,21 @@ const share = () => {
     fileName.toLowerCase();
     fileName = fileName.replace(/[^a-zA-Z0-9]/g, "");
     canvas.value.toBlob((blob) => {
+        console.log(
+            new File([blob], `${fileName}.png`, {
+                type: "image/png",
+            })
+        );
         if (navigator.share) {
             navigator
                 .share({
                     title: contentInfo.title,
                     text: contentInfo.description,
-                    files: new File([blob], `${fileName}.png`),
+                    files: [
+                        new File([blob], `${fileName}.png`, {
+                            type: "image/png",
+                        }),
+                    ],
                 })
                 .then(() => console.log("Successful share"))
                 .catch((error) => console.log("Error sharing", error));
