@@ -213,7 +213,7 @@ const share = () => {
                 .share({
                     title: contentInfo.title,
                     text: contentInfo.description,
-                    files: [new File([blob], `${fileName}.png`)],
+                    files: new File([blob], `${fileName}.png`),
                 })
                 .then(() => console.log("Successful share"))
                 .catch((error) => console.log("Error sharing", error));
