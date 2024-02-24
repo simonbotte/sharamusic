@@ -207,17 +207,18 @@ const share = () => {
     let fileName = `${contentInfo.title}`;
     fileName.toLowerCase();
     fileName = fileName.replace(/[^a-zA-Z0-9]/g, "");
-
-    if (navigator.share) {
-        navigator
-            .share({
-                title: contentInfo.title,
-                text: contentInfo.description,
-                files: [new File([canvas.value.toBlob()], `${fileName}.png`)],
-            })
-            .then(() => console.log("Successful share"))
-            .catch((error) => console.log("Error sharing", error));
-    }
+    canvas.value.toBlob((blob) => {
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: contentInfo.title,
+                    text: contentInfo.description,
+                    files: [new File([blob], `${fileName}.png`)],
+                })
+                .then(() => console.log("Successful share"))
+                .catch((error) => console.log("Error sharing", error));
+        }
+    }, "image/png");
 };
 
 onMounted(() => {
@@ -236,6 +237,7 @@ onMounted(() => {
         <img class="sharable w-full max-w-96" ref="generatedImage" />
         <div class="save fixed bottom-10">
             <button
+                v-show="canShare"
                 v-on:click="share"
                 class="bg-zinc-700/30 text-white rounded-md px-4 py-2"
             >
