@@ -216,8 +216,7 @@ const share = () => {
         if (navigator.share) {
             navigator
                 .share({
-                    title: contentInfo.title,
-                    text: contentInfo.description,
+                    title: "",
                     files: [
                         new File([blob], `${fileName}.png`, {
                             type: "image/png",
