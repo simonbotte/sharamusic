@@ -16,9 +16,27 @@ const { data, error } = await useFetch(url, {
         Authorization: `Bearer ${token.value}`,
     },
 });
+if (error.value) {
+    if (error.value.statusCode === 404) {
+        throw createError({
+            cause: "Contenu non trouvé.",
+            message: "Le contenu que vous cherchez n'existe pas.",
+            statusCode: 404,
+            fatal: false,
+        });
+    }else{
+        throw createError({
+            cause: "Erreur inconnue.",
+            message: "Une erreur inconnue est survenue.",
+            statusCode: 500,
+            fatal: false,
+        });
+    
+    }
+}
 content.value = data.value.data[0];
 
-const gradiantProps = {
+const gradientProps = {
     gradientRotate1: Math.floor(Math.random() * 360),
     gradientRotate2: Math.floor(Math.random() * 360),
     gradientColor1: `#${content.value.attributes.artwork.textColor3}`,
@@ -27,7 +45,7 @@ const gradiantProps = {
     content: content.value,
 };
 
-const { getGradientImageUrl } = useGrainGradient(gradiantProps);
+const { getGradientImageUrl } = useGrainGradient(gradientProps);
 const { getContentInfo } = useContentInfo(content.value);
 const { drawRoundRect, drawImageWithBorderRadius, drawText } = useCanvasUtils();
 const contentInfo = getContentInfo();
