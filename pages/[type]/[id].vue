@@ -41,6 +41,15 @@ useHead({
         },
     ],
 });
+const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+};
 
 const buildCanvas = async () => {
     const canvasProps = {
@@ -52,24 +61,25 @@ const buildCanvas = async () => {
     canvas.value.width = canvasProps.width;
     canvas.value.height = canvasProps.height;
 
-    //create 2 canvas to have calcs to handle z-index
+    //create 3 canvas to have calcs to handle z-index
     const calc1 = document.createElement("canvas");
     const calc2 = document.createElement("canvas");
+    const calc3 = document.createElement("canvas");
     const ctxCalc1 = calc1.getContext("2d");
     const ctxCalc2 = calc2.getContext("2d");
+    const ctxCalc3 = calc3.getContext("2d");
 
     calc1.width = canvasProps.width;
     calc1.height = canvasProps.height;
     calc2.width = canvasProps.width;
     calc2.height = canvasProps.height;
+    calc3.width = canvasProps.width;
+    calc3.height = canvasProps.height;
 
     //add gradient background
     const gradientImageUrl = await getGradientImageUrl();
-    const gradientImg = new Image();
-    gradientImg.src = gradientImageUrl;
-    gradientImg.onload = () => {
-        ctx.drawImage(gradientImg, 0, 0);
-    };
+    const gradientImg = await loadImage(gradientImageUrl);
+    ctx.drawImage(gradientImg, 0, 0);
 
     //create the card
     const cardProps = {
@@ -86,7 +96,7 @@ const buildCanvas = async () => {
         cardProps.width,
         cardProps.height,
         cardProps.borderRadius,
-        `#${content.value.attributes.artwork.bgColor}`
+        `#${content.value.attributes.artwork.bgColor}CC`
     );
 
     //add the content artwork
@@ -94,32 +104,24 @@ const buildCanvas = async () => {
         width: 540,
         height: 540,
     };
+
     let imageSource = content.value.attributes.artwork.url
-        .replace("{w}", 1080)
-        .replace("{h}", 1080);
-    const img = new Image();
+        .replace("{w}", "1080")
+        .replace("{h}", "1080");
+    const artwork = await loadImage(imageSource);
 
-    img.src = imageSource;
-    img.crossOrigin = "anonymous";
-
-    img.onload = () => {
-        drawImageWithBorderRadius(
-            ctxCalc2,
-            img,
-            canvasProps.width / 2 - imageProps.width / 2,
-            canvasProps.height / 2 - cardProps.height / 2 + 32,
-            imageProps.width,
-            imageProps.height,
-            8
-        );
-        setTimeout(() => {
-            ctx.drawImage(calc2, 0, 0);
-        }, 80);
-    };
+    drawImageWithBorderRadius(
+        ctxCalc2,
+        artwork,
+        canvasProps.width / 2 - imageProps.width / 2,
+        canvasProps.height / 2 - cardProps.height / 2 + 32,
+        imageProps.width,
+        imageProps.height,
+        8
+    );
 
     //add textes
     const contentInfo = getContentInfo();
-    console.log(contentInfo);
     const textProps = {
         title: {
             text: contentInfo.title,
@@ -155,59 +157,63 @@ const buildCanvas = async () => {
                 44 +
                 44 +
                 40,
-            opacity: 0.6,
+            opacity: 0.8,
         },
     };
-    setTimeout(() => {
-        drawText(
-            ctx,
-            textProps.title.text,
-            textProps.title.x,
-            textProps.title.y,
-            textProps.title.font,
-            textProps.title.color,
-            1,
-            540,
-            28
-        );
-        drawText(
-            ctx,
-            textProps.description.text,
-            textProps.description.x,
-            textProps.description.y,
-            textProps.description.font,
-            textProps.description.color,
-            textProps.description.opacity,
-            540,
-            28
-        );
-        drawText(
-            ctx,
-            textProps.brand.text,
-            textProps.brand.x,
-            textProps.brand.y,
-            textProps.brand.font,
-            textProps.brand.color,
-            textProps.brand.opacity,
-            540,
-            28
-        );
-    }, 200);
-    setTimeout(() => {
-        ctx.drawImage(calc1, 0, 0);
-    }, 20);
-    setTimeout(() => {
-        generatedImage.value.src = canvas.value.toDataURL("image/png");
-    }, 200);
+
+    drawText(
+        ctxCalc3,
+        textProps.title.text,
+        textProps.title.x,
+        textProps.title.y,
+        textProps.title.font,
+        textProps.title.color,
+        1,
+        510,
+        28
+    );
+    drawText(
+        ctxCalc3,
+        textProps.description.text,
+        textProps.description.x,
+        textProps.description.y,
+        textProps.description.font,
+        textProps.description.color,
+        textProps.description.opacity,
+        520,
+        28
+    );
+    drawText(
+        ctxCalc3,
+        textProps.brand.text,
+        textProps.brand.x,
+        textProps.brand.y,
+        textProps.brand.font,
+        textProps.brand.color,
+        textProps.brand.opacity,
+        540,
+        28
+    );
+
+    ctx.drawImage(calc1, 0, 0);
+    ctx.drawImage(calc2, 0, 0);
+    ctx.drawImage(calc3, 0, 0);
+
+    generatedImage.value.src = canvas.value.toDataURL("image/png");
 };
 
 const share = () => {
+    const contentInfo = getContentInfo();
+    let fileName = `${contentInfo.title}`;
+    fileName.toLowerCase();
+    fileName = fileName.replace(/[^a-zA-Z0-9]/g, "");
+
     if (navigator.share) {
         navigator
             .share({
                 title: contentInfo.title,
                 text: contentInfo.description,
-                files: [canvas.value.toBlob()],
+                files: [new File([canvas.value.toBlob()], `${fileName}.png`)],
             })
             .then(() => console.log("Successful share"))
             .catch((error) => console.log("Error sharing", error));
@@ -230,7 +236,6 @@ onMounted(() => {
         <img class="sharable w-full max-w-96" ref="generatedImage" />
         <div class="save fixed bottom-10">
             <button
-                v-show="canShare"
                 v-on:click="share"
                 class="bg-zinc-700/30 text-white rounded-md px-4 py-2"
             >

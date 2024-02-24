@@ -1,6 +1,6 @@
 const useContentInfo = (content) => {
     const getContentInfo = () => {
-        console.log(content.value);
+
         switch (content.type) {
             case "artists":
                 return {
