@@ -1,21 +1,23 @@
 const useContentInfo = (content) => {
     const getContentInfo = () => {
-
         switch (content.type) {
             case "artists":
                 return {
                     title: content.attributes.name,
-                    description: "Artiste",
+                    description: '',
+                    type: 'artist'
                 };
             case "albums":
                 return {
                     title: content.attributes.name,
-                    description: `Album · ${content.attributes.artistName}`,
-                };
+                    description: ` · ${content.attributes.artistName}`,
+                    type: 'album'
+                };  
             case "songs":
                 return {
                     title: content.attributes.name,
-                    description: `Morceau · ${content.attributes.artistName}`,
+                    description:` · ${content.attributes.artistName}`,
+                    type: 'song'
                 };
             default:
                 return {

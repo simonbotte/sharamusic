@@ -1,4 +1,5 @@
 <script setup>
+const { locale, t } = useI18n();
 const route = useRoute();
 const link64 = route.params.link;
 const link = ref(atob(link64));
@@ -37,6 +38,6 @@ if (match) {
 
 <template>
     <span class="text-zinc-50">
-        Redirection...
+        {{$t('redirecting')}}
     </span>
 </template>
