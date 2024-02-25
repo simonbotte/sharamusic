@@ -9,7 +9,7 @@ const content = ref({});
 const generatedImage = ref(null);
 const canvas = ref(null);
 const canShare = ref(false);
-
+const { locale, t } = useI18n();
 const url = `https://api.music.apple.com/v1/catalog/fr/${type}/${id}`;
 const { data, error } = await useFetch(url, {
     headers: {
@@ -149,7 +149,7 @@ const buildCanvas = async () => {
             y: canvasProps.height / 2 - cardProps.height / 2 + 32 + 540 + 44,
         },
         description: {
-            text: contentInfo.description,
+            text: t(contentInfo.type) + contentInfo.description,
             font: "28px SF-PRO-TEXT",
             color: `#${content.value.attributes.artwork.textColor1}`,
             x: canvasProps.width / 2 - 540 / 2,
@@ -267,7 +267,7 @@ onMounted(() => {
                 v-on:click="share"
                 class="bg-zinc-700/30 text-white rounded-md px-4 py-2"
             >
-                Partager
+                {{$t("share")}}
             </button>
         </div>
     </div>

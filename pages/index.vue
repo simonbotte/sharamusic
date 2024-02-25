@@ -1,11 +1,21 @@
 <script setup>
 const query = ref("");
-const { data } = await useFetch("/api/security/token");
-const token = ref(data.value.token);
+const { data: fetchedToken } = await useFetch("/api/security/token");
+const token = ref(fetchedToken.value.token);
 const temporizer = ref(null);
 const albums = ref([]);
 const songs = ref([]);
 const artists = ref([]);
+const { locale } = useI18n();
+const { storefront } = await useFetch(
+    `https://api.music.apple.com/v1/storefronts/${locale.value}`,
+    {
+        headers: {
+            Authorization: `Bearer ${token.value}`,
+        },
+    }
+);
+console.log(storefront);
 const search = async () => {
     if (temporizer.value) {
         clearTimeout(temporizer.value);
@@ -19,15 +29,16 @@ const search = async () => {
         }
         let querySerialized = query.value;
         querySerialized = querySerialized.replace(/\s/g, "+");
-        const url = `https://api.music.apple.com/v1/catalog/fr/search?term=${querySerialized}&types=albums,songs,artists&limit=15`;
-        const { data, error } = await useFetch(url, {
+        const url = `https://api.music.apple.com/v1/catalog/${locale.value}/search?term=${querySerialized}&types=albums,songs,artists&limit=15`;
+        const { results } = await $fetch(url, {
             headers: {
                 Authorization: `Bearer ${token.value}`,
             },
         });
-        albums.value = data.value.results.albums.data;
-        songs.value = data.value.results.songs.data;
-        artists.value = data.value.results.artists.data;
+        
+        albums.value = results.albums.data;
+        songs.value = results.songs.data;
+        artists.value = results.artists.data;
 
         artists.value = artists.value.slice(0, 3);
         albums.value = albums.value.slice(0, 5);
@@ -36,14 +47,14 @@ const search = async () => {
 </script>
 
 <template>
-    <section class="home pt-0 w-full mx-auto">
+    <section class="home pt-0 w-full mx-auto mt-1">
         <div
             class="sticky container mx-auto px-4 top-0 py-4 bg-zinc-900/40 z-20 backdrop-blur-sm"
         >
             <div class="relative">
                 <input
                     class="border-zinc-700 border rounded-md pl-8 py-1 pr-4 w-full bg-zinc-900 focus:outline-zinc-600 text-zinc-50 placeholder:text-zinc-400"
-                    placeholder="Rechercher"
+                    :placeholder="$t('search')"
                     type="text"
                     v-model="query"
                     v-on:input="search"

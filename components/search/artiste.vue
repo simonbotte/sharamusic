@@ -1,4 +1,5 @@
 <script setup>
+const localePath = useLocalePath();
 const props = defineProps({
     artist: Object,
 });
@@ -19,12 +20,12 @@ const contentInitials = computed(() => {
 <template>
     <NuxtLink
         v-if="hasArtwork"
-        :to="`/artists/${artist.id}`"
+        :to="localePath({name:'type-id',params:{type:'artists',id:artist.id}})"
         class="artist flex items-center border-b border-b-zinc-700 gap-2 py-2 text-zinc-50"
     >
         <div class="w-16 h-16 relative shrink-0">
             <img
-                class="absolute z-10 rounded-full border border-zinc-700"
+                class="absolute z-10 rounded-full border w-16 h-16 border-zinc-700"
                 :width="64"
                 :src="$getArtwork(artist?.attributes?.artwork?.url, 128, 128)"
             />
@@ -42,7 +43,7 @@ const contentInitials = computed(() => {
                 {{ artist.attributes.name }}
             </p>
             <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-                Artiste
+                {{ $t('artist') }} 
             </p>
         </div>
     </NuxtLink>
